@@ -1,0 +1,21 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+
+[packages]
+lxml = "*"
+pyinstaller = "*"
+pypiwin32 = "*"
+pyppeteer = "*"
+pywinauto = "*"
+requests = "*"
+
+[requires]
+python_version = "3.8"
+
+[scripts]
+build = "cd winstall && pyinstaller winstall.py --icon=../assets/logo.ico --onefile --uac-admin && del *.spec /q /s 1>nul && cd .."
+clean = "cd winstall && rmdir build /q /s && rmdir dist /q /s && cd .."
