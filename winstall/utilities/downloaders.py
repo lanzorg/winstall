@@ -66,7 +66,7 @@ def from_url(url: str) -> str:
     :rtype: str
     """
     try:
-        with requests.get(url=url, allow_redirects=True, stream=True) as r:
+        with requests.get(url=url, allow_redirects=True, stream=True, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/80.0'}) as r:
             downloaded_file = os.path.join(mkdtemp(), get_filename(url))
             with open(downloaded_file, "wb") as f:
                 for chunk in r.iter_content(chunk_size=1024):
@@ -88,7 +88,7 @@ def get_filename(url: str) -> str:
     :rtype: str
     """
     try:
-        with requests.head(url, allow_redirects=True) as r:
+        with requests.head(url, allow_redirects=True, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Gecko/20100101 Firefox/80.0'}) as r:
             if "Content-Disposition" in r.headers.keys():
                 return unquote_plus(re.findall("filename=(.+)", r.headers["Content-Disposition"])[0]).replace('"', "").replace(" ", "")
             elif is_valid_filename(r.url.split("/")[-1]):
