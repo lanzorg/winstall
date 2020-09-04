@@ -1,5 +1,11 @@
+import os
+
+from utilities.wincommons import purge_desktop_links
+
+
 def main():
-    pass
+    purge_desktop_links("Lan")
+    print("")
 
 
 if __name__ == "__main__":

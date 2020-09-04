@@ -6,7 +6,7 @@ import requests
 
 from programs.program import Program
 from utilities.downloaders import from_url
-from utilities.wincommons import get_file_version
+from utilities.wincommons import get_version
 
 
 class Nodejs(Program):
@@ -16,7 +16,7 @@ class Nodejs(Program):
 
     @property
     def actual_version(self) -> str:
-        return get_file_version(os.path.join(self.install_dir, "node.exe"))
+        return get_version(os.path.join(self.install_dir, "node.exe"))
 
     @property
     def latest_version(self) -> str:

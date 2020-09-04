@@ -1,3 +1,4 @@
+import glob
 import os
 import subprocess
 import winreg
@@ -5,7 +6,7 @@ import winreg
 from win32api import HIWORD, LOWORD, GetFileVersionInfo
 
 
-def add_to_path(directory: str, persisted: bool = False) -> None:
+def add_path(directory: str, persisted: bool = False) -> None:
     """
     Add the full path of the directory to the Windows system PATH.
 
@@ -24,31 +25,40 @@ def add_to_path(directory: str, persisted: bool = False) -> None:
     os.environ["PATH"] = new_path
 
 
-def del_regedit_keys(key0: str, key1: str, key2: str = "") -> None:
+def get_version(target: str) -> str:
     try:
-        if key2 == "":
-            current_key = key1
-        else:
-            current_key = key1 + "\\" + key2
-        open_key = winreg.OpenKey(key0, current_key, 0, winreg.KEY_ALL_ACCESS)
+        info = GetFileVersionInfo(target, "\\")
+        ms = info["FileVersionMS"]
+        ls = info["FileVersionLS"]
+        return f"{HIWORD(ms)}.{LOWORD(ms)}.{HIWORD(ls)}.{LOWORD(ls)}"
+    except:
+        return "0.0.0.0"
+
+
+def purge_desktop_links(link_name: str) -> None:
+    current_desktop = os.path.join(os.environ["USERPROFILE"], "Desktop")
+    default_desktop = "C:/Users/Default/Desktop"
+    for f in glob.glob(os.path.join(current_desktop, f"*{link_name}*.lnk")):
+        os.remove(f)
+    for f in glob.glob(os.path.join(default_desktop, f"*{link_name}*.lnk")):
+        try:
+            os.remove(f)
+        except:
+            pass
+
+
+def purge_keys(key0: str, key1: str, key2: str = None) -> None:
+    try:
+        curr_key = key1 if key2 else key1 + "\\" + key2
+        open_key = winreg.OpenKey(key0, curr_key, 0, winreg.KEY_ALL_ACCESS)
         info_key = winreg.QueryInfoKey(open_key)
         for _ in range(0, info_key[0]):
             subkey = winreg.EnumKey(open_key, 0)
             try:
                 winreg.DeleteKey(open_key, subkey)
             except:
-                del_regedit_keys(key0, current_key, subkey)
+                purge_keys(key0, curr_key, subkey)
         winreg.DeleteKey(open_key, "")
         open_key.Close()
     except:
         pass
-
-
-def get_file_version(target_file: str) -> str:
-    try:
-        info = GetFileVersionInfo(target_file, "\\")
-        ms = info["FileVersionMS"]
-        ls = info["FileVersionLS"]
-        return f"{HIWORD(ms)}.{LOWORD(ms)}.{HIWORD(ls)}.{LOWORD(ls)}"
-    except:
-        return "0.0.0.0"
