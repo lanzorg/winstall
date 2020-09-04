@@ -1,3 +1,4 @@
 {
-    "python.analysis.extraPaths": ["winstall"]
+    "python.analysis.extraPaths": ["winstall"],
+    "python.formatting.provider": "black"
 }

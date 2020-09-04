@@ -1,6 +1,7 @@
 import os
 import re
 import subprocess
+from functools import cached_property
 
 import requests
 
@@ -10,15 +11,15 @@ from utilities.wincommons import get_version
 
 
 class Nodejs(Program):
-    @property
+    @cached_property
     def install_dir(self) -> str:
         return os.path.join(os.environ.get("PROGRAMFILES"), "nodejs")
 
-    @property
+    @cached_property
     def actual_version(self) -> str:
         return get_version(os.path.join(self.install_dir, "node.exe"))
 
-    @property
+    @cached_property
     def latest_version(self) -> str:
         address = "https://nodejs.org/en/download/current/"
         content = requests.get(address).text
@@ -26,8 +27,7 @@ class Nodejs(Program):
         return version
 
     def download(self) -> str:
-        version = self.latest_version
-        address = f"https://nodejs.org/dist/v{version}/node-v{version}-x64.msi"
+        address = f"https://nodejs.org/dist/v{self.latest_version}/node-v{self.latest_version}-x64.msi"
         return from_url(address)
 
     def install(self) -> None:
