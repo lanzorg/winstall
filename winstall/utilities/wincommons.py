@@ -36,15 +36,10 @@ def get_version(target: str) -> str:
 
 
 def purge_desktop_links(link_name: str) -> None:
-    current_desktop = os.path.join(os.environ["USERPROFILE"], "Desktop")
-    default_desktop = "C:/Users/Default/Desktop"
-    for f in glob.glob(os.path.join(current_desktop, f"*{link_name}*.lnk")):
+    for f in glob.glob(os.path.join(os.environ["USERPROFILE"], "Desktop", f"*{link_name}*.lnk")):
         os.remove(f)
-    for f in glob.glob(os.path.join(default_desktop, f"*{link_name}*.lnk")):
-        try:
-            os.remove(f)
-        except:
-            pass
+    for f in glob.glob(os.path.join("C:/Users/Public/Desktop", f"*{link_name}*.lnk")):
+        os.remove(f)
 
 
 def purge_keys(key0: str, key1: str, key2: str = None) -> None:
