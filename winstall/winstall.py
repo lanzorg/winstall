@@ -2,9 +2,9 @@ import argparse
 import asyncio
 import inspect
 import re
-import sys
 from typing import List
 
+import packages
 from packages import *
 
 
@@ -40,7 +40,7 @@ def get_pkg_list() -> List[str]:
     :rtype: List[str]
     """
     pkg_list = []
-    cls_list = [x[0] for x in inspect.getmembers(sys.modules[__name__], inspect.isclass)]
+    cls_list = [x[0] for x in inspect.getmembers(packages, inspect.isclass)]
     for p in cls_list:
         pkg_list.append(to_cli_name(p))
     return pkg_list
@@ -54,16 +54,20 @@ def install(pkg_list: List[str]) -> None:
     :type pkg_list: List[str]
     """
     for pkg_name in pkg_list:
-        pkg_inst = globals()[to_cls_name(pkg_name)]()
-        if pkg_inst.is_updated:
-            print(f'The "{pkg_name}" package is already updated!')
-        else:
-            pkg_stat = "updated" if pkg_inst.is_installed else "installed"
-            if inspect.iscoroutinefunction(pkg_inst.install):
-                asyncio.run(pkg_inst.install())
+        try:
+            pkg_inst = globals()[to_cls_name(pkg_name)]()
+            if pkg_inst.is_updated:
+                print(f'The "{pkg_name}" package is already updated!')
             else:
-                pkg_inst.install()
-            print(f'The "{pkg_name}" package was {pkg_stat} successful!')
+                pkg_stat = "updated" if pkg_inst.is_installed else "installed"
+                if inspect.iscoroutinefunction(pkg_inst.install):
+                    asyncio.run(pkg_inst.install())
+                else:
+                    pkg_inst.install()
+                print(f'The "{pkg_name}" package was {pkg_stat} successfully!')
+        except Exception as e:
+            print(f'The "{pkg_name}" package was not installed successfully!')
+            print(f'e')
 
 
 if __name__ == "__main__":
