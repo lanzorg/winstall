@@ -17,7 +17,8 @@ class Nodejs(Package):
 
     @cached_property
     def actual_version(self) -> str:
-        return get_version(os.path.join(self.install_dir, "node.exe"))
+        version = get_version(os.path.join(self.install_dir, "node.exe"))
+        return version
 
     @cached_property
     def latest_version(self) -> str:
@@ -27,11 +28,13 @@ class Nodejs(Package):
         return version
 
     def download(self) -> str:
-        address = f"https://nodejs.org/dist/v{self.latest_version}/node-v{self.latest_version}-x64.msi"
-        return from_url(address)
+        version = self.latest_version
+        address = f"https://nodejs.org/dist/v{version}/node-v{version}-x64.msi"
+        package = from_url(address)
+        return package
 
     def install(self) -> None:
-        if self.is_updated:
-            return
-        program = self.download()
-        subprocess.run(f'msiexec.exe /i "{program}" /qn /norestart')
+        if not self.is_updated:
+            package = self.download()
+            command = f'msiexec.exe /i "{package}" /qn /norestart'
+            subprocess.run(command)

@@ -16,23 +16,26 @@ class Figma(Package):
 
     @cached_property
     def actual_version(self) -> str:
-        return get_version(os.path.join(self.install_dir, "Figma.exe"))
+        version = get_version(os.path.join(self.install_dir, "Figma.exe"))
+        return version
 
     @cached_property
     def latest_version(self) -> str:
-        return "9999.0.0.0"
+        version = "9999.9999.9999.9999"
+        return version
 
     def download(self) -> str:
         address = "https://desktop.figma.com/win/FigmaSetup.exe"
-        return from_url(address)
+        package = from_url(address)
+        return package
 
     def install(self) -> None:
-        if self.is_updated:
-            return
-        program = self.download()
-        subprocess.run(f'"{program}" /s /S /q /Q /quiet /silent /SILENT /VERYSILENT')
-        results = []
-        while not results:
-            results = glob.glob(os.path.join(os.environ["USERPROFILE"], "Desktop", "Figma*.lnk"))
-            time.sleep(0.5)
-        os.remove(results[0])
+        if not self.is_updated:
+            package = self.download()
+            command = f'"{package}" /s /S /q /Q /quiet /silent /SILENT /VERYSILENT'
+            subprocess.run(command)
+            results = []
+            while not results:
+                results = glob.glob(os.path.join(os.environ["USERPROFILE"], "Desktop", "Figma*.lnk"))
+                time.sleep(0.5)
+            os.remove(results[0])

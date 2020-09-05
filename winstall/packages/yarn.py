@@ -16,7 +16,8 @@ class Yarn(Package):
 
     @cached_property
     def actual_version(self) -> str:
-        return "0.0.0.0"
+        version = "0.0.0.0"
+        return version
 
     @cached_property
     def latest_version(self) -> str:
@@ -26,11 +27,13 @@ class Yarn(Package):
         return version
 
     def download(self) -> str:
-        address = f"https://github.com/yarnpkg/yarn/releases/download/v{self.latest_version}/yarn-{self.latest_version}.msi"
-        return from_url(address)
+        version = self.latest_version
+        address = f"https://github.com/yarnpkg/yarn/releases/download/v{version}/yarn-{version}.msi"
+        package = from_url(address)
+        return package
 
     def install(self) -> None:
-        if self.is_updated:
-            return
-        program = self.download()
-        subprocess.run(f'msiexec.exe /i "{program}" /qn /norestart')
+        if not self.is_updated:
+            package = self.download()
+            command = f'msiexec.exe /i "{package}" /qn /norestart'
+            subprocess.run(command)

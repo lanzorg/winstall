@@ -17,7 +17,8 @@ class Chromium(Package):
 
     @cached_property
     def actual_version(self) -> str:
-        return get_version(os.path.join(self.install_dir, "Application/chrome.exe")) + "-1"
+        version = get_version(os.path.join(self.install_dir, "Application/chrome.exe")) + "-1"
+        return version
 
     @cached_property
     def latest_version(self) -> str:
@@ -27,15 +28,14 @@ class Chromium(Package):
         return version
 
     def download(self) -> str:
-        address = f"https://github.com/tangalbert919/ungoogled-chromium-binaries/releases/download/{self.latest_version}/ungoogled-chromium_{self.latest_version}.1_installer-x64.exe"
-        return from_url(address)
+        version = self.latest_version
+        address = f"https://github.com/tangalbert919/ungoogled-chromium-binaries/releases/download/{version}/ungoogled-chromium_{version}.1_installer-x64.exe"
+        package = from_url(address)
+        return package
 
     def install(self) -> None:
-        if self.is_updated:
-            return
-        program = self.download()
-        if self.is_installed:
-            subprocess.run(f'"{program}" --do-not-launch-chrome')
-        else:
-            subprocess.run(f'"{program}" --system-level --do-not-launch-chrome')
-        purge_desktop_links("Chromium")
+        if not self.is_updated:
+            package = self.download()
+            command = f'"{package}" --do-not-launch-chrome' if self.is_installed else f'"{package}" --system-level --do-not-launch-chrome'
+            subprocess.run(command)
+            purge_desktop_links("Chromium")
