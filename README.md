@@ -25,7 +25,7 @@ The **winstall.exe** file should be available into the **./winstall/winstall/dis
 
 ## Usage
 
-Make sure you ralaunched cmd or powershell as admin before.
+Make sure you launched cmd or powershell **as administrator** before.
 
 ```shell
 ./winstall.exe -i pkg1 pkg2 pkg3
