@@ -15,7 +15,7 @@
 
 ```shell
 git clone https://github.com/lanzorg/winstall.git
-cd winstall
+cd ./winstall
 pipenv shell
 pipenv install
 pipenv run build
