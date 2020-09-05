@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod, abstractproperty
 from pkg_resources import parse_version
 
 
-class Program(ABC):
+class Package(ABC):
     @abstractproperty
     def install_dir(self) -> str:
         pass

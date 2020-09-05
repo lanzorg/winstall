@@ -4,12 +4,12 @@ import subprocess
 import time
 from functools import cached_property
 
-from programs.program import Program
+from packages.package import Package
 from utilities.downloaders import from_url
 from utilities.wincommons import get_version
 
 
-class Figma(Program):
+class Figma(Package):
     @cached_property
     def install_dir(self) -> str:
         return os.path.join(os.environ["USERPROFILE"], "AppData/Local/Figma")

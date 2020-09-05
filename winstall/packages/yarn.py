@@ -5,11 +5,11 @@ from functools import cached_property
 
 import requests
 
-from programs.program import Program
+from packages.package import Package
 from utilities.downloaders import from_url
 
 
-class Yarn(Program):
+class Yarn(Package):
     @cached_property
     def install_dir(self) -> str:
         return os.path.join(os.environ.get("PROGRAMFILES(X86)"), "Yarn")

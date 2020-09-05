@@ -5,12 +5,12 @@ from functools import cached_property
 
 import requests
 
-from programs.program import Program
+from packages.package import Package
 from utilities.downloaders import from_url
 from utilities.wincommons import get_version
 
 
-class Nodejs(Program):
+class Nodejs(Package):
     @cached_property
     def install_dir(self) -> str:
         return os.path.join(os.environ.get("PROGRAMFILES"), "nodejs")
