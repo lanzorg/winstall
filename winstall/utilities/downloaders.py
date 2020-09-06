@@ -33,8 +33,8 @@ async def from_filecr(url: str) -> str:
     await page.evaluate("""document.querySelector("#sh_pdf_download-2 > form > input.download_submit.download_allow.button.mid.dark.spaced").click();""")
     download_dir = tempfile.mkdtemp()
     await page._client.send("Page.setDownloadBehavior", {"behavior": "allow", "downloadPath": download_dir})
-    await asyncio.sleep(70)
-    await page.evaluate("""document.querySelector("body > div.section-wrap.counter-section > div > section > div:nth-child(1) > div.ac-btn > a").click();""")
+    await asyncio.sleep(10)
+    await page.evaluate("""document.querySelector("body > div.section-wrap > div > div > main > div:nth-child(2) > div > div.header-details > a").click();""")
     archive_file = await _wait_for_download_completion(download_dir)
     await browser.close()
     return archive_file

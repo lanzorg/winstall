@@ -7,7 +7,7 @@ from tempfile import mkdtemp
 import requests
 
 from utilities.downloaders import from_url
-from utilities.wincommons import add_to_path
+from utilities.wincommons import add_path
 
 
 def _initialize() -> str:
@@ -25,7 +25,7 @@ def _initialize() -> str:
         for r, d, f in os.walk(extract_msi(package)):
             for name in f:
                 if name == "7z.exe":
-                    add_to_path(r)
+                    add_path(r)
     return "7z.exe"
 
 
