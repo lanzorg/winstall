@@ -67,11 +67,20 @@ def install(pkg_list: List[str]) -> None:
                 print(f'The "{pkg_name}" package was {pkg_stat} successfully!')
         except Exception as e:
             print(f'The "{pkg_name}" package was not installed successfully!')
-            print(f'e')
+            print(f"e")
 
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser(description="Install your packages and keep them updated.")
     parser.add_argument("-i", "--install", choices=get_pkg_list(), dest="packages", help="install or update the packages", metavar="package", nargs="*", required=True)
     install(parser.parse_args().packages)
     input("Press any key to continue...")
+
+
+def test() -> None:
+    pkg = None
+    input("Press any key to continue...")
+
+
+if __name__ == "__main__":
+    main()
