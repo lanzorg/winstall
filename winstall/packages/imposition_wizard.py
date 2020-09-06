@@ -38,8 +38,8 @@ class ImpositionWizard(Package):
         if not self.is_updated:
             archive = await self.download()
             destination = extract_dir(archive, password="123")
-            program = glob.glob(f"{destination}/*.exe")[0]
-            command = f'"{program}" /S'
+            package = glob.glob(f"{destination}/*.exe")[0]
+            command = f'"{package}" /S'
             subprocess.run(command)
             source = os.path.join(destination, "crack/ImpositionWizard.exe")
             target = os.path.join(self.install_dir, "ImpositionWizard.exe")
