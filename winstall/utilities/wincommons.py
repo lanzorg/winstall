@@ -1,9 +1,10 @@
 import glob
 import os
 import subprocess
+import time
 import winreg
-import psutil
 
+import psutil
 from win32api import HIWORD, LOWORD, GetFileVersionInfo
 
 
@@ -58,3 +59,12 @@ def purge_keys(key0: str, key1: str, key2: str = None) -> None:
         open_key.Close()
     except:
         pass
+
+
+def wait_process(process_name: str) -> None:
+    for p in psutil.process_iter():
+        if process_name.lower() in p.as_dict()["name"].lower():
+            usage_list = [1.0, 1.0, 1.0, 1.0, 1.0]
+            while sum(usage_list[-5:]) > 0:
+                time.sleep(5)
+                usage_list.append(p.cpu_percent(interval=1))
