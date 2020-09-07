@@ -7,10 +7,6 @@ from typing import List
 import packages
 from packages import *
 
-import psutil
-
-from utilities.wincommons import process_disk_usage
-
 
 def to_cli_name(name: str) -> str:
     """
@@ -71,7 +67,7 @@ def install(pkg_list: List[str]) -> None:
                 print(f'The "{pkg_name}" package was {pkg_stat} successfully!')
         except Exception as e:
             print(f'The "{pkg_name}" package was not installed successfully!')
-            print(f"e")
+            print(e)
 
 
 def main() -> None:
@@ -82,11 +78,8 @@ def main() -> None:
 
 
 def test() -> None:
-    # pkg = AndroidStudio()
-    # pkg.install()
-    r = process_disk_usage("studio64.exe")
     input("Press any key to continue...")
 
 
 if __name__ == "__main__":
-    test()
+    main()

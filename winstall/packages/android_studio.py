@@ -1,16 +1,15 @@
 import os
 import re
-from re import match
 import subprocess
-from functools import cached_property
 import time
+from functools import cached_property
 
 import requests
 from pywinauto import Desktop, keyboard
 
 from packages.package import Package
 from utilities.downloaders import from_url
-from utilities.wincommons import get_version
+from utilities.wincommons import get_version, wait_process
 
 
 class AndroidStudio(Package):
@@ -44,41 +43,44 @@ class AndroidStudio(Package):
             package = self.download()
             command = f'"{package}" /S'
             subprocess.run(command)
-            # if not first_install:
-            #     subprocess.Popen(os.path.join(self.install_dir, "bin/studio64.exe"))
-            #     win1 = Desktop(backend="uia").window(title_re="Import.*")
-            #     try:
-            #         win1.set_focus()
-            #         keyboard.send_keys("{TAB}")
-            #         keyboard.send_keys("{SPACE}")
-            #     except:
-            #         pass
-            #     win2 = Desktop(backend="uia").window(title_re="Data.*")
-            #     try:
-            #         win2.set_focus()
-            #         keyboard.send_keys("{SPACE}")
-            #     except:
-            #         pass
-            #     win3 = Desktop(backend="uia").window(title_re="Android.*Wizard.*")
-            #     win3.set_focus()
-            #     keyboard.send_keys("{SPACE}")
-            #     # Install Type
-            #     time.sleep(5)
-            #     keyboard.send_keys("{TAB}")
-            #     keyboard.send_keys("{TAB}")
-            #     keyboard.send_keys("{SPACE}")
-            #     # Select UI Theme
-            #     time.sleep(5)
-            #     keyboard.send_keys("{SPACE}")
-            #     # Verify Settings
-            #     time.sleep(5)
-            #     keyboard.send_keys("{TAB}")
-            #     keyboard.send_keys("{TAB}")
-            #     keyboard.send_keys("{TAB}")
-            #     keyboard.send_keys("{SPACE}")
-            #     # Downloading Components
-            #     # TODO: Wait studio64.exe Disk and Network usage is 0
-            #     win4 = Desktop(backend="uia").window(title_re="Welcome.*Android.*")
-            #     win4.wait('visible', 600)
-            #     win4.set_focus()
-            #     win4.close()
+            if first_install:
+                subprocess.Popen(os.path.join(self.install_dir, "bin/studio64.exe"))
+                win1 = Desktop(backend="uia").window(title_re="Import.*")
+                try:
+                    win1.set_focus()
+                    keyboard.send_keys("{TAB}")
+                    keyboard.send_keys("{SPACE}")
+                except:
+                    pass
+                win2 = Desktop(backend="uia").window(title_re="Data.*")
+                try:
+                    win2.set_focus()
+                    keyboard.send_keys("{SPACE}")
+                except:
+                    pass
+                win3 = Desktop(backend="uia").window(title_re="Android.*Wizard.*")
+                win3.set_focus()
+                time.sleep(5)
+                keyboard.send_keys("{SPACE}")
+                # Install Type
+                time.sleep(5)
+                keyboard.send_keys("{TAB}")
+                keyboard.send_keys("{TAB}")
+                keyboard.send_keys("{SPACE}")
+                # Select UI Theme
+                time.sleep(5)
+                keyboard.send_keys("{SPACE}")
+                # Verify Settings
+                time.sleep(5)
+                keyboard.send_keys("{TAB}")
+                keyboard.send_keys("{TAB}")
+                keyboard.send_keys("{TAB}")
+                keyboard.send_keys("{SPACE}")
+                # Downloading Components
+                wait_process("studio64")
+                keyboard.send_keys("{SPACE}")
+                # Welcome  Android
+                win4 = Desktop(backend="uia").window(title_re="Welcome.*Android.*")
+                win4.wait(" visible")
+                win4.set_focus()
+                win4.close()
