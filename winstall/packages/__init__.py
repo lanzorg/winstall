@@ -1,3 +1,4 @@
+from packages.android_studio import AndroidStudio
 from packages.chromium import Chromium
 from packages.figma import Figma
 from packages.firefox_developer import FirefoxDeveloper

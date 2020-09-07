@@ -7,6 +7,10 @@ from typing import List
 import packages
 from packages import *
 
+import psutil
+
+from utilities.wincommons import process_disk_usage
+
 
 def to_cli_name(name: str) -> str:
     """
@@ -78,9 +82,11 @@ def main() -> None:
 
 
 def test() -> None:
-    pkg = None
+    # pkg = AndroidStudio()
+    # pkg.install()
+    r = process_disk_usage("studio64.exe")
     input("Press any key to continue...")
 
 
 if __name__ == "__main__":
-    main()
+    test()

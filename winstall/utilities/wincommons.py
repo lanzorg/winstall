@@ -2,6 +2,7 @@ import glob
 import os
 import subprocess
 import winreg
+import psutil
 
 from win32api import HIWORD, LOWORD, GetFileVersionInfo
 
