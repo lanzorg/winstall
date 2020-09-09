@@ -66,5 +66,5 @@ def wait_process(process_name: str) -> None:
         if process_name.lower() in p.as_dict()["name"].lower():
             usage_list = [1.0, 1.0, 1.0, 1.0, 1.0]
             while sum(usage_list[-5:]) > 0:
-                time.sleep(5)
+                time.sleep(10)
                 usage_list.append(p.cpu_percent(interval=1))

@@ -47,6 +47,7 @@ class AndroidStudio(Package):
                 subprocess.Popen(os.path.join(self.install_dir, "bin/studio64.exe"))
                 win1 = Desktop(backend="uia").window(title_re="Import.*")
                 try:
+                    win1.wait("ready", timeout=10)
                     win1.set_focus()
                     keyboard.send_keys("{TAB}")
                     keyboard.send_keys("{SPACE}")
@@ -54,11 +55,13 @@ class AndroidStudio(Package):
                     pass
                 win2 = Desktop(backend="uia").window(title_re="Data.*")
                 try:
+                    win2.wait("ready", timeout=10)
                     win2.set_focus()
                     keyboard.send_keys("{SPACE}")
                 except:
                     pass
-                win3 = Desktop(backend="uia").window(title_re="Android.*Wizard.*")
+                win3 = Desktop(backend="uia").window(title_re=".*Wizard")
+                win3.wait("ready", timeout=100)
                 win3.set_focus()
                 time.sleep(5)
                 keyboard.send_keys("{SPACE}")
@@ -78,9 +81,10 @@ class AndroidStudio(Package):
                 keyboard.send_keys("{SPACE}")
                 # Downloading Components
                 wait_process("studio64")
+                win3.set_focus()
                 keyboard.send_keys("{SPACE}")
                 # Welcome  Android
                 win4 = Desktop(backend="uia").window(title_re="Welcome.*Android.*")
-                win4.wait(" visible")
+                win4.wait("visible")
                 win4.set_focus()
                 win4.close()
