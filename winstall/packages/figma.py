@@ -27,7 +27,7 @@ class Figma(Package):
 
     @cached_property
     def last_version(self) -> str:
-        return "9999.9999.9999.9999"
+        return "9999"
 
     def download(self) -> str:
         address = "https://desktop.figma.com/win/FigmaSetup.exe"
@@ -40,6 +40,6 @@ class Figma(Package):
             subprocess.run(command)
             results = []
             while not results:
-                results = glob.glob(Path().joinpath(os.environ["USERPROFILE"], "Desktop", "Figma*.lnk"))
+                results = glob.glob(str(Path().joinpath(os.environ["USERPROFILE"], "Desktop", "Figma*.lnk")))
                 time.sleep(0.5)
             os.remove(results[0])
