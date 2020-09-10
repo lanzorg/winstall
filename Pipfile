@@ -13,6 +13,7 @@ pyppeteer = "*"
 pywinauto = "*"
 requests = "*"
 psutil = "*"
+prettytable = "*"
 
 [requires]
 python_version = "3.8"

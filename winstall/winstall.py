@@ -4,6 +4,8 @@ import inspect
 import re
 from typing import List
 
+from prettytable import PrettyTable
+
 import packages
 from packages import *
 
@@ -46,6 +48,17 @@ def get_pkg_list() -> List[str]:
     return pkg_list
 
 
+def list() -> None:
+    """..."""
+    pt = PrettyTable()
+    pt.field_names = ["package_name", "package_info", "curr_version", "last_version", "is_installed", "needs_update"]
+    pt.align = "l"
+    for pkg_name in get_pkg_list():
+        pkg_inst = globals()[to_cls_name(pkg_name)]()
+        pt.add_row([pkg_inst.package_name, pkg_inst.package_info, pkg_inst.curr_version, pkg_inst.last_version, pkg_inst.is_installed, pkg_inst.needs_update])
+    print(pt)
+
+
 def install(pkg_list: List[str]) -> None:
     """
     Install all packages taking care to know if install() is asynchronous or not.
@@ -56,10 +69,10 @@ def install(pkg_list: List[str]) -> None:
     for pkg_name in pkg_list:
         try:
             pkg_inst = globals()[to_cls_name(pkg_name)]()
-            if pkg_inst.is_updated:
+            if not pkg_inst.needs_update:
                 print(f'The "{pkg_name}" package is already updated!')
             else:
-                pkg_stat = "updated" if pkg_inst.is_installed else "installed"
+                pkg_stat = "installed" if pkg_inst.is_installed else "updated"
                 if inspect.iscoroutinefunction(pkg_inst.install):
                     asyncio.run(pkg_inst.install())
                 else:
@@ -72,8 +85,12 @@ def install(pkg_list: List[str]) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Install your packages and keep them updated.")
-    parser.add_argument("-i", "--install", choices=get_pkg_list(), dest="packages", help="install or update the packages", metavar="package", nargs="*", required=True)
-    install(parser.parse_args().packages)
+    parser.add_argument("-l", "--list", help="list all packages", action="store_true")
+    parser.add_argument("-i", "--install", choices=get_pkg_list(), dest="packages", help="install or update the packages", metavar="package", nargs="*")
+    if parser.parse_args().list:
+        list()
+    if parser.parse_args().packages:
+        install(parser.parse_args().packages)
     input("Press any key to continue...")
 
 
