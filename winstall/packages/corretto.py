@@ -12,7 +12,7 @@ from utilities.downloaders import from_url
 
 
 class Corretto(Package):
-    """Multiplatform and production-ready distribution of OpenJDK from Amazon."""
+    """Production-ready distribution of OpenJDK from Amazon."""
 
     @cached_property
     def package_root(self) -> str:

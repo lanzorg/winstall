@@ -15,7 +15,7 @@ from utilities.wincommons import get_version, purge_desktop_links
 
 
 class ImpositionWizard(Package):
-    """PDF imposition software with simple user interface and realtime preview."""
+    """Imposition software with simple GUI and realtime preview."""
 
     @cached_property
     def package_root(self) -> str:

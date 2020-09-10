@@ -33,15 +33,15 @@ Make sure you launched cmd or powershell **as administrator** before.
 
 ## Packages
 
-| Name                      | Information                                                              |
-|---------------------------|--------------------------------------------------------------------------|
-| android-sdk-cmdline-tools | The Android SDK command line tools.                                      |
-| chromium                  | Free and open-source web browser from Google.                            |
-| corretto                  | Multiplatform and production-ready distribution of OpenJDK from Amazon.  |
-| figma                     | Collaborative UI design tool built in the browser.                       |
-| firefox-developer         | Open-source web browser made for developers from Mozilla.                |
-| flutter                   | Google’s UI toolkit for building natively compiled applications.         |
-| imposition-wizard         | PDF imposition software with simple user interface and realtime preview. |
-| nodejs                    | JavaScript runtime built on Chrome's V8 engine.                          |
-| picotorrent               | Tiny and hackable BitTorrent client.                                     |
-| yarn                      | Fast, reliable, and secure dependency management.                        |
+| Name                      | Information                                                       |
+|---------------------------|-------------------------------------------------------------------|
+| android-sdk-cmdline-tools | The Android SDK command line tools.                               |
+| chromium                  | Free and open-source web browser from Google.                     |
+| corretto                  | Production-ready distribution of OpenJDK from Amazon.             |
+| figma                     | Collaborative UI design tool built in the browser.                |
+| firefox-developer         | Open-source web browser made for developers from Mozilla.         |
+| flutter                   | Google’s UI toolkit for building natively compiled applications.  |
+| imposition-wizard         | Imposition software with simple GUI and realtime preview.         |
+| nodejs                    | JavaScript runtime built on Chrome's V8 engine.                   |
+| picotorrent               | Tiny and hackable BitTorrent client.                              |
+| yarn                      | Fast, reliable, and secure dependency management.                 |
