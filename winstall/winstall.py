@@ -51,11 +51,12 @@ def get_pkg_list() -> List[str]:
 def list() -> None:
     """..."""
     pt = PrettyTable()
-    pt.field_names = ["package_name", "package_info", "curr_version", "last_version", "is_installed", "needs_update"]
+    pt.field_names = ["package_name", "package_type", "package_info", "curr_version", "last_version", "is_installed", "needs_update"]
     pt.align = "l"
+    pt.sortby = "package_name"
     for pkg_name in get_pkg_list():
         pkg_inst = globals()[to_cls_name(pkg_name)]()
-        pt.add_row([pkg_inst.package_name, pkg_inst.package_info, pkg_inst.curr_version, pkg_inst.last_version, pkg_inst.is_installed, pkg_inst.needs_update])
+        pt.add_row([pkg_inst.package_name, pkg_inst.package_type, pkg_inst.package_info, pkg_inst.curr_version, pkg_inst.last_version, pkg_inst.is_installed, pkg_inst.needs_update])
     print(pt)
 
 
