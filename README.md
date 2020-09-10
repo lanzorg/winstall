@@ -33,15 +33,15 @@ Make sure you launched cmd or powershell **as administrator** before.
 
 ## Packages
 
-| Name                      | Type         | Information                                                              |
-|---------------------------|--------------|--------------------------------------------------------------------------|
-| android-sdk-cmdline-tools | Development  | The Android SDK command line tools.                                      |
-| chromium                  | Internet     | Free and open-source web browser from Google.                            |
-| corretto                  | Development  | Multiplatform and production-ready distribution of OpenJDK from Amazon.  |
-| figma                     | Graphics     | Collaborative UI design tool built in the browser.                       |
-| firefox-developer         | Internet     | Open-source web browser made for developers from Mozilla.                |
-| flutter                   | Development  | Google’s UI toolkit for building natively compiled applications.         |
-| imposition-wizard         | Office       | PDF imposition software with simple user interface and realtime preview. |
-| nodejs                    | Development  | JavaScript runtime built on Chrome's V8 engine.                          |
-| picotorrent               | Internet     | Tiny and hackable BitTorrent client.                                     |
-| yarn                      | Development  | Fast, reliable, and secure dependency management.                        |
+| Name                      | Information                                                              |
+|---------------------------|--------------------------------------------------------------------------|
+| android-sdk-cmdline-tools | The Android SDK command line tools.                                      |
+| chromium                  | Free and open-source web browser from Google.                            |
+| corretto                  | Multiplatform and production-ready distribution of OpenJDK from Amazon.  |
+| figma                     | Collaborative UI design tool built in the browser.                       |
+| firefox-developer         | Open-source web browser made for developers from Mozilla.                |
+| flutter                   | Google’s UI toolkit for building natively compiled applications.         |
+| imposition-wizard         | PDF imposition software with simple user interface and realtime preview. |
+| nodejs                    | JavaScript runtime built on Chrome's V8 engine.                          |
+| picotorrent               | Tiny and hackable BitTorrent client.                                     |
+| yarn                      | Fast, reliable, and secure dependency management.                        |
