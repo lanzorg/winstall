@@ -39,13 +39,20 @@ class AndroidSdkCmdlineTools(Package):
         return from_url(address)
 
     def install(self) -> None:
-        if self.needs_update:
-            archive = self.download()
+        if not self.is_installed:
             self.package_root.mkdir(exist_ok=True)
+            archive = self.download()
             extract_all(archive, self.package_root)
             shutil.rmtree(self.package_root.joinpath("cmdline-tools"), ignore_errors=True)
             os.rename(self.package_root.joinpath("tools"), self.package_root.joinpath("cmdline-tools"))
             subprocess.run(f'setx.exe ANDROID_HOME /M "{self.install_dir}"')
-            add_path(self.package_root.joinpath("cmdline-tools", "bin"), persisted=True)
-            add_path(self.package_root.joinpath("cmdline-tools", "emulator"), persisted=True)
-            add_path(self.package_root.joinpath("cmdline-tools", "platform-tools"), persisted=True)
+            add_path(self.package_root.joinpath("cmdline-tools", "latest", "bin"), persisted=True)
+            add_path(self.package_root.joinpath("emulator"), persisted=True)
+            add_path(self.package_root.joinpath("platform-tools"), persisted=True)
+        yep = " ".join(["y" for _ in range(1000)])
+        subprocess.run(["powershell", f"echo {yep} | sdkmanager.bat --update"])
+        subprocess.run(["powershell", f"echo {yep} | sdkmanager.bat 'platforms;android-29'"])
+        subprocess.run(["powershell", f"echo {yep} | sdkmanager.bat 'build-tools;29.0.3'"])
+        subprocess.run(["powershell", f"echo {yep} | sdkmanager.bat 'system-images;android-29;default;x86'"])
+        subprocess.run(["powershell", f"echo {yep} | sdkmanager.bat --licenses"])
+        subprocess.run(["powershell", "avdmanager create avd -k 'system-images;android-29;default;x86' -n 'pixel-xl' -d 'pixel_xl' -f"])

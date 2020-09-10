@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import subprocess
 from functools import cached_property
 from pathlib import Path
@@ -23,7 +24,11 @@ class Yarn(Package):
 
     @cached_property
     def curr_version(self) -> str:
-        return "0.0.0.0"
+        try:
+            content = subprocess.run(['yarn.cmd', '--version'], stdout=subprocess.PIPE)
+            return re.search("([\\d.]+)", content.stdout.decode('utf-8')).group(1)
+        except:
+            return "0.0.0.0"
 
     @cached_property
     def last_version(self) -> str:

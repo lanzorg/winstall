@@ -17,14 +17,12 @@ def add_path(directory: str, persisted: bool = False) -> None:
     :param persisted: Specify whether the PATH has to be permanently stored, defaults to False.
     :type persisted: bool, optional
     """
-    old_path = os.environ["PATH"]
-    if old_path.endswith(os.pathsep):
-        new_path = old_path + directory
-    else:
-        new_path = old_path + os.pathsep + directory
-    if persisted:
-        subprocess.run('setx PATH /M "{0}"'.format(new_path))
-    os.environ["PATH"] = new_path
+    if directory not in os.environ["PATH"]:
+        old_path = os.environ["PATH"]        
+        new_path = old_path + str(directory) if old_path.endswith(os.pathsep) else old_path + os.pathsep + str(directory)
+        if persisted:
+            subprocess.run('setx PATH /M "{0}"'.format(new_path))
+        os.environ["PATH"] = new_path
 
 
 def get_version(target: str) -> str:
