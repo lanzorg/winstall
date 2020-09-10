@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 from functools import cached_property
+from pathlib import Path
 
 import requests
 
@@ -11,30 +12,32 @@ from utilities.wincommons import get_version
 
 
 class Nodejs(Package):
-    @cached_property
-    def install_dir(self) -> str:
-        return os.path.join(os.environ.get("PROGRAMFILES"), "nodejs")
+    """JavaScript runtime built on Chrome's V8 engine."""
 
     @cached_property
-    def actual_version(self) -> str:
-        version = get_version(os.path.join(self.install_dir, "node.exe"))
-        return version
+    def package_root(self) -> str:
+        return Path().joinpath(os.environ.get("PROGRAMFILES"), "nodejs")
 
     @cached_property
-    def latest_version(self) -> str:
+    def package_type(self) -> str:
+        return "Development"
+
+    @cached_property
+    def curr_version(self) -> str:
+        return get_version(self.package_root.joinpath("node.exe"))
+
+    @cached_property
+    def last_version(self) -> str:
         address = "https://nodejs.org/en/download/current/"
         content = requests.get(address).text
-        version = re.search("Current Version: <strong>([\\d.]+)</strong>", content).group(1)
-        return version
+        return re.search("Current Version: <strong>([\\d.]+)</strong>", content).group(1)
 
     def download(self) -> str:
-        version = self.latest_version
-        address = f"https://nodejs.org/dist/v{version}/node-v{version}-x64.msi"
-        package = from_url(address)
-        return package
+        address = f"https://nodejs.org/dist/v{self.last_version}/node-v{self.last_version}-x64.msi"
+        return from_url(address)
 
     def install(self) -> None:
-        if not self.is_updated:
+        if self.needs_update:
             package = self.download()
             command = f'msiexec.exe /i "{package}" /qn /norestart'
             subprocess.run(command)

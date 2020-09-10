@@ -29,7 +29,7 @@ def add_path(directory: str, persisted: bool = False) -> None:
 
 def get_version(target: str) -> str:
     try:
-        info = GetFileVersionInfo(target, "\\")
+        info = GetFileVersionInfo(str(target), "\\")
         ms = info["FileVersionMS"]
         ls = info["FileVersionLS"]
         return f"{HIWORD(ms)}.{LOWORD(ms)}.{HIWORD(ls)}.{LOWORD(ls)}"

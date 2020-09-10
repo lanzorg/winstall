@@ -1,31 +1,27 @@
 import os
+import re
 from abc import ABC, abstractmethod, abstractproperty
+from pathlib import Path
 
 from pkg_resources import parse_version
 
 
 class Package(ABC):
     @abstractproperty
-    def install_dir(self) -> str:
+    def package_root(self) -> Path:
         pass
 
     @abstractproperty
-    def actual_version(self) -> str:
+    def package_type(self) -> str:
         pass
 
     @abstractproperty
-    def latest_version(self) -> str:
+    def curr_version(self) -> str:
         pass
 
-    @property
-    def is_installed(self) -> bool:
-        return os.path.exists(self.install_dir) and len(os.listdir(self.install_dir)) > 0
-
-    @property
-    def is_updated(self) -> bool:
-        actual_version = parse_version(str(self.actual_version))
-        latest_version = parse_version(str(self.latest_version))
-        return self.is_installed and latest_version <= actual_version
+    @abstractproperty
+    def last_version(self) -> str:
+        pass
 
     @abstractmethod
     def download(self) -> str:
@@ -34,3 +30,21 @@ class Package(ABC):
     @abstractmethod
     def install(self) -> None:
         pass
+
+    @property
+    def package_name(self) -> str:
+        return "-".join([x.casefold() for x in re.findall("[A-Z0-9][^A-Z0-9]*", type(self).__name__)])
+
+    @property
+    def package_info(self) -> str:
+        return self.__doc__ if self.__doc__ else "..."
+
+    @property
+    def is_installed(self) -> bool:
+        return os.path.exists(self.package_root) and len(os.listdir(self.package_root)) > 0
+
+    @property
+    def needs_update(self) -> bool:
+        if not self.is_installed:
+            return True
+        return parse_version(str(self.last_version)) > parse_version(str(self.curr_version))

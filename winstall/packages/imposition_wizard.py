@@ -4,6 +4,7 @@ import re
 import shutil
 import subprocess
 from functools import cached_property
+from pathlib import Path
 
 import requests
 
@@ -14,34 +15,37 @@ from utilities.wincommons import get_version, purge_desktop_links
 
 
 class ImpositionWizard(Package):
-    @cached_property
-    def install_dir(self) -> str:
-        return os.path.join(os.environ.get("PROGRAMFILES"), "Appsforlife/Imposition Wizard 3")
+    """PDF imposition software with simple user interface and realtime preview."""
 
     @cached_property
-    def actual_version(self) -> str:
-        version = get_version(os.path.join(self.install_dir, "ImpositionWizard.exe"))
-        return version
+    def package_root(self) -> str:
+        return Path().joinpath(os.environ.get("PROGRAMFILES"), "Appsforlife", "Imposition Wizard 3")
 
     @cached_property
-    def latest_version(self) -> str:
+    def package_type(self) -> str:
+        return "Office"
+
+    @cached_property
+    def curr_version(self) -> str:
+        return get_version(self.package_root.joinpath("ImpositionWizard.exe"))
+
+    @cached_property
+    def last_version(self) -> str:
         address = "https://filecr.com/windows/imposition-wizard/"
         content = requests.get(address).text
-        version = re.search("<h2>Imposition Wizard (.*)</h2>", content).group(1)
-        return version
+        return re.search("<h2>Imposition Wizard (.*)</h2>", content).group(1)
 
     async def download(self) -> str:
-        archive = await from_filecr("https://filecr.com/windows/imposition-wizard/")
-        return archive
+        return await from_filecr("https://filecr.com/windows/imposition-wizard/")
 
     async def install(self) -> None:
-        if not self.is_updated:
+        if self.needs_update:
             archive = await self.download()
             destination = extract_dir(archive, password="123")
             package = glob.glob(f"{destination}/*.exe")[0]
             command = f'"{package}" /S'
             subprocess.run(command)
-            source = os.path.join(destination, "crack/ImpositionWizard.exe")
-            target = os.path.join(self.install_dir, "ImpositionWizard.exe")
+            source = Path(destination).joinpath("crack", "ImpositionWizard.exe")
+            target = self.package_root.joinpath("ImpositionWizard.exe")
             shutil.copy(source, target)
             purge_desktop_links("Imposition Wizard")

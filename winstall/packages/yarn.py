@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 from functools import cached_property
+from pathlib import Path
 
 import requests
 
@@ -10,30 +11,32 @@ from utilities.downloaders import from_url
 
 
 class Yarn(Package):
-    @cached_property
-    def install_dir(self) -> str:
-        return os.path.join(os.environ.get("PROGRAMFILES(X86)"), "Yarn")
+    """Fast, reliable, and secure dependency management."""
 
     @cached_property
-    def actual_version(self) -> str:
-        version = "0.0.0.0"
-        return version
+    def package_root(self) -> Path:
+        return Path().joinpath(os.environ.get("PROGRAMFILES(X86)"), "Yarn")
 
     @cached_property
-    def latest_version(self) -> str:
+    def package_type(self) -> str:
+        return "Development"
+
+    @cached_property
+    def curr_version(self) -> str:
+        return "0.0.0.0"
+
+    @cached_property
+    def last_version(self) -> str:
         address = "https://api.github.com/repos/yarnpkg/yarn/releases/latest"
         content = requests.get(address).text
-        version = json.loads(content)["name"].replace("v", "")
-        return version
+        return json.loads(content)["name"].replace("v", "")
 
     def download(self) -> str:
-        version = self.latest_version
-        address = f"https://github.com/yarnpkg/yarn/releases/download/v{version}/yarn-{version}.msi"
-        package = from_url(address)
-        return package
+        address = f"https://github.com/yarnpkg/yarn/releases/download/v{self.last_version}/yarn-{self.last_version}.msi"
+        return from_url(address)
 
     def install(self) -> None:
-        if not self.is_updated:
+        if self.needs_update:
             package = self.download()
             command = f'msiexec.exe /i "{package}" /qn /norestart'
             subprocess.run(command)
