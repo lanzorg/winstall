@@ -1,4 +1,5 @@
 from packages.android_sdk_cmdline_tools import AndroidSdkCmdlineTools
+from packages.antidote import Antidote
 from packages.chromium import Chromium
 from packages.corretto import Corretto
 from packages.figma import Figma
