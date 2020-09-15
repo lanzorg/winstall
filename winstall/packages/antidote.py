@@ -57,14 +57,31 @@ class Antidote(Package):
             shutil.copy(Path().joinpath(destination, "Crack", "Antidote.exe"), self.package_root.joinpath("Antidote 10", "Application", "Bin64", "Antidote.exe"))
             os.system("taskkill /f /im chrome.exe")
             self._post_install()
+        
+    def _hide_connectix_icon(self) -> None:
+        subprocess.Popen(self.package_root.joinpath("Connectix 10", "Application", "Bin64", "Connectix.exe"))
+        win1 = Desktop(backend="uia").window(title="Connectix")
+        win1.wait("visible", timeout=20)
+        win1.set_focus()
+        keyboard.send_keys("^R")
+        win2 = Desktop(backend="uia").window(title_re="Options.*")
+        win2.wait("visible")
+        win2.set_focus()
+        keyboard.send_keys("{TAB 4}")
+        keyboard.send_keys("{SPACE}")
+        keyboard.send_keys("{TAB 10}")
+        keyboard.send_keys("{SPACE}")
+        win1.close()
 
     def _post_install(self) -> None:
         subprocess.Popen(self.package_root.joinpath("Antidote 10", "Application", "Bin64", "Antidote.exe"))
+        # Handle the 1st window.
         win1 = Desktop(backend="uia").window(class_name="Qt5QWindowIcon")
         win1.wait("visible", timeout=20)
         win1.set_focus()
         link = win1["Enter a serial number…"]
         link.click_input()
+        # Handle the 2nd window.
         time.sleep(3)
         win2 = Desktop(backend="uia").window(class_name="Qt5QWindowIcon")
         win2.wait("visible")
@@ -76,6 +93,7 @@ class Antidote(Package):
         keyboard.send_keys("{TAB}")
         keyboard.send_keys("123-456-789-012")
         keyboard.send_keys("{SPACE}")
+        # Handle the 3rd window.
         time.sleep(3)
         win3 = Desktop(backend="uia").window(class_name="Qt5QWindowIcon")
         win3.wait("visible")
@@ -84,11 +102,13 @@ class Antidote(Package):
         keyboard.send_keys("{TAB}")
         keyboard.send_keys("{TAB}")
         keyboard.send_keys("{SPACE}")
+        # Handle the 4th window.
         time.sleep(3)
         win4 = Desktop(backend="uia").Antidote
         win4.wait("visible")
         win4.set_focus()
         keyboard.send_keys("{SPACE}")
+        # Handle the 5th window.
         time.sleep(3)
         win5 = Desktop(backend="uia").window(title_re="Personalize.*")
         win5.wait("visible")
@@ -98,6 +118,7 @@ class Antidote(Package):
         keyboard.send_keys("{SPACE}")
         keyboard.send_keys("{TAB}")
         keyboard.send_keys("{SPACE}")
+        # Handle the 6th window.
         time.sleep(3)
         win6 = Desktop(backend="uia").window(title_re="Personalize.*")
         win6.wait("visible")
@@ -112,11 +133,15 @@ class Antidote(Package):
         keyboard.send_keys("{SPACE}")
         keyboard.send_keys("{TAB}")
         keyboard.send_keys("{SPACE}")
+        # Kill all related processes.
         time.sleep(3)
         os.system("taskkill /f /im Antidote.exe")
         os.system("taskkill /f /im Connectix.exe")
         os.system("taskkill /f /im AgentAntidote.exe")
         os.system("taskkill /f /im AgentConnectix.exe")
+        time.sleep(3)
+        # Hide the connectix icon from taskbar.
+        self._hide_connectix_icon()
 
     def _remove_leftovers(self) -> None:
         if os.path.exists("C:/Windows/AM213468.bin"):
