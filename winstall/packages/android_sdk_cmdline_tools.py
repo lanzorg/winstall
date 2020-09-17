@@ -1,3 +1,4 @@
+import asyncio
 import os
 import re
 import shutil
@@ -29,7 +30,8 @@ class AndroidSdkCmdlineTools(Package):
         return "0.0.0.0"
 
     @cached_property
-    def last_version(self) -> str:
+    async def last_version(self) -> str:
+        await asyncio.sleep(5)
         address = "https://developer.android.com/studio"
         content = requests.get(address).text
         return re.search("commandlinetools-win-(\d+)_latest.zip", content).group(1)

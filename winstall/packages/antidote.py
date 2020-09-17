@@ -1,3 +1,4 @@
+import asyncio
 import glob
 import os
 import re
@@ -33,7 +34,8 @@ class Antidote(Package):
         return get_version(self.package_root.joinpath("Antidote 10", "Application", "Bin64", "Antidote.exe"))
 
     @cached_property
-    def last_version(self) -> str:
+    async def last_version(self) -> str:
+        await asyncio.sleep(3)
         address = "https://filecr.com/windows/antidote/"
         content = requests.get(address).text
         return re.search("<h2>Antidote (.*)</h2>", content).group(1).replace(" ", ".").replace("v", "")
