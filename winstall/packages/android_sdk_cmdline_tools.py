@@ -1,4 +1,3 @@
-import asyncio
 import os
 import re
 import shutil
@@ -9,6 +8,7 @@ from pathlib import Path
 import requests
 
 from packages.package import Package
+from services.winservice import WinService
 from utilities.downloaders import from_url
 from utilities.unarchivers import extract_all
 from utilities.wincommons import add_path
@@ -16,6 +16,9 @@ from utilities.wincommons import add_path
 
 class AndroidSdkCmdlineTools(Package):
     """The Android SDK command line tools."""
+
+    def __init__(self) -> None:
+        self.winservice = WinService()
 
     @cached_property
     def package_root(self) -> str:
@@ -27,17 +30,17 @@ class AndroidSdkCmdlineTools(Package):
 
     @cached_property
     def curr_version(self) -> str:
-        return "0.0.0.0"
+        return self.winservice.get_file_created(self.package_root.joinpath("cmdline-tools", "latest", "lib", "sdkmanager-classpath.jar"))
 
     @cached_property
-    async def last_version(self) -> str:
-        await asyncio.sleep(5)
-        address = "https://developer.android.com/studio"
-        content = requests.get(address).text
-        return re.search("commandlinetools-win-(\d+)_latest.zip", content).group(1)
+    def last_version(self) -> str:
+        return "0"
 
     def download(self) -> str:
-        address = f"https://dl.google.com/android/repository/commandlinetools-win-{self.last_version}_latest.zip"
+        address = "https://developer.android.com/studio"
+        content = requests.get(address).text
+        release = re.search("commandlinetools-win-(\d+)_latest.zip", content).group(1)
+        address = f"https://dl.google.com/android/repository/commandlinetools-win-{release}_latest.zip"
         return from_url(address)
 
     def install(self) -> None:

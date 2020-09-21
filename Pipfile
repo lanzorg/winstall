@@ -14,12 +14,17 @@ pywinauto = "*"
 requests = "*"
 psutil = "*"
 prettytable = "*"
-pyqt5 = "*"
-asyncqt = "*"
+arrow = "*"
+maya = "*"
+humanize = "*"
+black = "*"
 
 [requires]
 python_version = "3.8"
 
 [scripts]
-build = "cd winstall && pyinstaller winstall.py --icon=../assets/logo.ico --onefile --uac-admin && del *.spec /q /s 1>nul && cd .."
+build = "cd winstall && pyinstaller winstall.py --icon=../assets/logo.ico --onefile --uac-admin --additional-hooks-dir=hooks  && del *.spec /q /s 1>nul && cd .."
 clean = "cd winstall && rmdir build /q /s && rmdir dist /q /s && cd .."
+
+[pipenv]
+allow_prereleases = true

@@ -9,7 +9,7 @@ import requests
 from packages.package import Package
 from utilities.downloaders import from_url
 from utilities.unarchivers import extract_dir
-from utilities.wincommons import add_path, get_version
+from utilities.wincommons import add_path
 
 
 class Flutter(Package):

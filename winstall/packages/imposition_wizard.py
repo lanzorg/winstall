@@ -39,7 +39,7 @@ class ImpositionWizard(Package):
         return await from_filecr("https://filecr.com/windows/imposition-wizard/")
 
     async def install(self) -> None:
-        if self.needs_update:
+        if not self.is_updated:
             archive = await self.download()
             destination = extract_dir(archive, password="123")
             package = glob.glob(f"{destination}/*.exe")[0]

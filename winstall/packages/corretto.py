@@ -41,7 +41,7 @@ class Corretto(Package):
         return from_url(address)
 
     def install(self) -> None:
-        if self.needs_update:
+        if not self.is_updated:
             package = self.download()
             command = f'msiexec.exe /i "{package}" INSTALLLEVEL=3 /quiet'
             subprocess.run(command)

@@ -33,12 +33,13 @@ class Chromium(Package):
         return json.loads(content)["tag_name"]
 
     def download(self) -> str:
-        address = f"https://github.com/tangalbert919/ungoogled-chromium-binaries/releases/download/{self.latest_version}/ungoogled-chromium_{self.latest_version}.1_installer-x64.exe"
+        address = f"https://github.com/tangalbert919/ungoogled-chromium-binaries/releases/download/{self.last_version}/ungoogled-chromium_{self.last_version}.1_installer-x64.exe"
         return from_url(address)
 
     def install(self) -> None:
-        if self.needs_update:
+        if not self.is_updated:
             package = self.download()
             command = f'"{package}" --do-not-launch-chrome' if self.is_installed else f'"{package}" --system-level --do-not-launch-chrome'
             subprocess.run(command)
             purge_desktop_links("Chromium")
+            os.system("taskkill /f /im chrome.exe")

@@ -38,6 +38,6 @@ class FirefoxDeveloper(Package):
         return from_url(address)
 
     def install(self) -> None:
-        if self.needs_update:
+        if not self.is_updated:
             package = self.download()
             subprocess.run(f'msiexec.exe /i /qn "{package}" DESKTOP_SHORTCUT=false INSTALL_MAINTENANCE_SERVICE=false')

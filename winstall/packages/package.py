@@ -20,7 +20,7 @@ class Package(ABC):
         pass
 
     @abstractproperty
-    async def last_version(self) -> str:
+    def last_version(self) -> str:
         pass
 
     @abstractmethod
@@ -48,7 +48,5 @@ class Package(ABC):
         return os.path.exists(self.package_root) and len(os.listdir(self.package_root)) > 0
 
     @property
-    async def needs_update(self) -> bool:
-        if not self.is_installed:
-            return True
-        return parse_version(str(await self.last_version)) > parse_version(str(self.curr_version))
+    def is_updated(self) -> bool:
+        return self.is_installed and parse_version(str(self.last_version)) <= parse_version(str(self.curr_version))
